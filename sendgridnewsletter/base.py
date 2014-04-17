@@ -1,4 +1,4 @@
-import simplejson
+import json
 
 from .exceptions import ImproperlyConfigured
 
@@ -7,7 +7,7 @@ class BaseObject(object):
     url = None
 
     def to_json(self, dictionary):
-        return simplejson.dumps(dictionary)
+        return json.dumps(dictionary)
 
     def get_url(self):
         if not self.url:
