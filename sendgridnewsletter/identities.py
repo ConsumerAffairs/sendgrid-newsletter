@@ -6,10 +6,10 @@ class IdentityManager(BaseManager):
 
     def get_identity(self, title):
         return self.master.call(
-            self.get_url().format(verb='get'), {'identity': title})
+            self.get_url(verb='get'), {'identity': title})
 
     def all(self):
-        data = self.master.call(self.get_url().format(verb='list'))
+        data = self.master.call(self.get_url(verb='list'))
         return [x['identity'] for x in data]
 
     def add(self, title, name, email, address, city, state, zip_code, country):
@@ -18,7 +18,7 @@ class IdentityManager(BaseManager):
             'address': address, 'city': city, 'state': state, 'zip': zip_code,
             'country': country}
 
-        result = self.master.call(self.get_url().format(verb='add'), data)
+        result = self.master.call(self.get_url(verb='add'), data)
 
         if 'message' in result:
             if result['message'] == 'success':
@@ -33,7 +33,7 @@ class IdentityManager(BaseManager):
             'email': email, 'address': address, 'city': city, 'state': state,
             'zip': zip_code, 'country': country}
 
-        result = self.master.call(self.get_url().format(verb='edit'), data)
+        result = self.master.call(self.get_url(verb='edit'), data)
 
         if 'message' in result:
             if result['message'] == 'success':
@@ -46,7 +46,7 @@ class IdentityManager(BaseManager):
 
     def delete(self, title):
         result = self.master.call(
-            self.get_url().format(verb='delete'), {'identity': title})
+            self.get_url(verb='delete'), {'identity': title})
 
         if 'message' in result:
             if result['message'] == 'success':

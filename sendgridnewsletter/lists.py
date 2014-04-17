@@ -7,12 +7,12 @@ class ListManager(BaseManager):
     url = 'newsletter/lists/{verb}'
 
     def all(self):
-        data = self.master.call(self.get_url().format(verb='get'))
+        data = self.master.call(self.get_url(verb='get'))
         return [x['list'] for x in data]
 
     def exists(self, name):
         data = self.master.call(
-            self.get_url().format(verb='get'), {'list': name})
+            self.get_url(verb='get'), {'list': name})
 
         if data[0]['list'] == name:
             return True
@@ -28,7 +28,7 @@ class ListManager(BaseManager):
 
     def add(self, name, email_name='email'):
         data = self.master.call(
-            self.get_url().format(verb='add'),
+            self.get_url(verb='add'),
             {'list': name, 'name': email_name})
 
         if 'message' in data:
@@ -40,7 +40,7 @@ class ListManager(BaseManager):
 
     def delete(self, name):
         data = self.master.call(
-            self.get_url().format(verb='delete'), {'list': name})
+            self.get_url(verb='delete'), {'list': name})
 
         if 'message' in data:
             status = data['message']
@@ -55,7 +55,7 @@ class ListManager(BaseManager):
                 "'{name}' list does not exist".format(name=old_name))
 
         data = self.master.call(
-            self.get_url().format(verb='edit'),
+            self.get_url(verb='edit'),
             {'list': old_name, 'newlist': new_name})
 
         if 'message' in data:
@@ -76,13 +76,13 @@ class List(BaseObject):
 
     def emails(self):
         return self.master.call(
-            self.get_url().format(verb='get'), self.payload)
+            self.get_url(verb='get'), self.payload)
 
     def has_email(self, email):
         self.payload['email'] = email
 
         data = self.master.call(
-            self.get_url().format(verb='get'), self.payload)
+            self.get_url(verb='get'), self.payload)
 
         if data:
             return True
@@ -93,7 +93,7 @@ class List(BaseObject):
         self.payload['data'] = self.to_json({'email': email, 'name': name})
 
         data = self.master.call(
-            self.get_url().format(verb='add'), self.payload)
+            self.get_url(verb='add'), self.payload)
 
         if 'inserted' in data:
             return True
@@ -105,7 +105,7 @@ class List(BaseObject):
         collected_data = "&data[]=".join(map(urllib.quote, json_data))
         final_data = "data[]=" + collected_data
         data = self.master.call(
-            self.get_url().format(verb='add'), self.payload,
+            self.get_url(verb='add'), self.payload,
             data_override=final_data)
 
         if 'inserted' in data:
@@ -117,7 +117,7 @@ class List(BaseObject):
         self.payload['email'] = email
 
         data = self.master.call(
-            self.get_url().format(verb='delete'), self.payload)
+            self.get_url(verb='delete'), self.payload)
 
         if 'removed' in data:
             return True
