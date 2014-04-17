@@ -6,7 +6,7 @@ class ScheduleManager(BaseManager):
 
     def get(self, newsletter_name):
         return self.master.call(
-            self.get_url(verb='get'), {'name': newsletter_name})
+            self.get_url(verb='get'), [('name', newsletter_name)])
 
     def add(self, newsletter_name, at=None, after=None):
         if at and after:
@@ -15,10 +15,10 @@ class ScheduleManager(BaseManager):
         if not at and not after:
             raise Exception('either at or after must be set')
 
-        payload = {}
-        payload['name'] = newsletter_name
-        payload['at'] = at.strftime("%Y-%m-%d %H:%M:%S")
-        payload['after'] = after
+        payload = []
+        payload.append(('name', newsletter_name))
+        payload.append(('at', at.strftime("%Y-%m-%d %H:%M:%S")))
+        payload.append(('after', after))
 
         result = self.master.call(self.get_url(verb='add'), payload)
 
@@ -30,7 +30,7 @@ class ScheduleManager(BaseManager):
 
     def remove(self, newsletter_name):
         result = self.master.call(
-            self.get_url(verb='delete'), {'name': newsletter_name})
+            self.get_url(verb='delete'), [('name', newsletter_name)])
 
         if 'message' in result:
             if result['message'] == 'success':

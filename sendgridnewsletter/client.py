@@ -22,17 +22,13 @@ class SendGridMarketing(object):
         self.schedule = ScheduleManager(self)
         self.recipients = RecipientsManager(self)
 
-    def call(self, app, params={}, data_type='json', data_override=None):
-        params.update(api_user=self.api_user)
-        params.update(api_key=self.api_key)
+    def call(self, app, params=[], data_type='json', data_override=None):
+        params.append(('api_user', self.api_user))
+        params.append(('api_key', self.api_key))
 
         url = '{root_url}/{app}.{data_type}'.format(
             root_url=self.root_url, app=app, data_type=data_type)
-        if not data_override:
-            response = requests.get(url, params=params)
-        else:
-            url = "{url}?{data}".format(url=url, data=data_override)
-            response = requests.get(url, params=params)
+        response = requests.get(url, params=params)
 
         final_result = response.json()
         if 'error' in final_result:

@@ -18,7 +18,7 @@ class ListManagerTest(TestCase):
         self.mock.StubOutWithMock(SendGridMarketing, 'call')
         self.list_manager.master.call(
             'newsletter/lists/get',
-            {'list': 'data'}).AndReturn([{'list': 'data'}])
+            [('list', 'data')]).AndReturn([{'list': 'data'}])
 
         self.mock.ReplayAll()
         result = self.list_manager.exists('data')
@@ -30,7 +30,7 @@ class ListManagerTest(TestCase):
         self.mock.StubOutWithMock(SendGridMarketing, 'call')
         self.list_manager.master.call(
             'newsletter/lists/delete',
-            {'list': 'data'}).AndReturn({'message': 'success'})
+            [('list', 'data')]).AndReturn({'message': 'success'})
 
         self.mock.ReplayAll()
         result = self.list_manager.delete('data')
@@ -42,7 +42,7 @@ class ListManagerTest(TestCase):
         self.mock.StubOutWithMock(SendGridMarketing, 'call')
         self.list_manager.master.call(
             'newsletter/lists/delete',
-            {'list': 'data'}).AndReturn({'error': 'fail'})
+            [('list', 'data')]).AndReturn({'error': 'fail'})
 
         self.mock.ReplayAll()
         result = self.list_manager.delete('data')
@@ -51,7 +51,7 @@ class ListManagerTest(TestCase):
         self.assertFalse(result)
 
     def test_rename(self):
-        data = {'list': 'list1', 'newlist': 'list2'}
+        data = [('list', 'list1'), ('newlist', 'list2')]
 
         self.mock.StubOutWithMock(ListManager, 'exists')
         self.mock.StubOutWithMock(SendGridMarketing, 'call')
@@ -67,13 +67,13 @@ class ListManagerTest(TestCase):
         self.assertTrue(result)
 
     def test_rename_error(self):
+        data = [('list', 'list1'), ('newlist', 'list2')]
         self.mock.StubOutWithMock(ListManager, 'exists')
         self.mock.StubOutWithMock(SendGridMarketing, 'call')
 
         self.list_manager.exists('list1').AndReturn(True)
         self.list_manager.master.call(
-            'newsletter/lists/edit',
-            {'list': 'list1', 'newlist': 'list2'}).AndReturn({'error': 'fail'})
+            'newsletter/lists/edit', data).AndReturn({'error': 'fail'})
 
         self.mock.ReplayAll()
         result = self.list_manager.rename('list1', 'list2')

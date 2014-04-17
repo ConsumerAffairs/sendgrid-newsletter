@@ -11,7 +11,7 @@ class NewsletterManager(BaseManager):
     def exists(self, name):
         try:
             self.master.call(
-                self.get_url(verb='get'), {'name': name})
+                self.get_url(verb='get'), [('name', name)])
             return True
         except Exception:
             return False
@@ -19,16 +19,16 @@ class NewsletterManager(BaseManager):
     def get_newsletter(self, name):
         if self.exists(name):
             return self.master.call(
-                self.get_url(verb='get'), {'name': name})
+                self.get_url(verb='get'), [('name', name)])
         else:
             raise DoesNotExist(
                 "'{name}' newsletter does not exist".format(name=name))
 
     def add(self, identity, name, subject, text, html):
-        data = {
-            'identity': identity, 'name': name, 'subject': subject,
-            'text': text, 'html': html
-        }
+        data = [
+            ('identity', identity), ('name', name), ('subject', subject),
+            ('text', text), ('html', html)
+        ]
 
         result = self.master.call(self.get_url(verb='add'), data)
 
@@ -40,10 +40,10 @@ class NewsletterManager(BaseManager):
 
     def edit(self, name, identity=None, new_name=None, subject=None, text=None,
              html=None):
-        data = {
-            'identity': identity, 'name': name, 'newname': new_name,
-            'subject': subject, 'text': text, 'html': html
-        }
+        data = [
+            ('identity', identity), ('name', name), ('newname', new_name),
+            ('subject', subject), ('text', text), ('html', html)
+        ]
 
         result = self.master.call(self.get_url(verb='edit'), data)
 
@@ -58,7 +58,7 @@ class NewsletterManager(BaseManager):
 
     def delete(self, name):
         result = self.master.call(
-            self.get_url(verb='delete'), {'name': name})
+            self.get_url(verb='delete'), [('name', name)])
 
         if 'message' in result:
             if result['message'] == 'success':
