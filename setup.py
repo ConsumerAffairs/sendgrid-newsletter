@@ -19,7 +19,8 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Topic :: Marketing :: Newsletters'
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Communications :: Email'
     ],
     packages=['sendgridnewsletter'],
     long_description=read('README.md')
