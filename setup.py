@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name='sendgrid-newsletter',
-    version='0.1',
+    version='0.1.1',
     author='Buddy Lindsey, Jr.',
     author_email='blindsey@consumeraffairs.com',
     include_package_data=True,
