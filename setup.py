@@ -11,6 +11,7 @@ setup(
     version='0.1',
     author='Buddy Lindsey, Jr.',
     author_email='blindsey@consumeraffairs.com',
+    include_package_data=True,
     url='https://github.com/ConsumerAffairs/sendgrid-newsletter',
     description='Library for using SendGrids newsletter api',
     install_requires=['requests==2.2.1'],
