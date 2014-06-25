@@ -1,14 +1,24 @@
 #!/usr/bin/python
 import os
+import sys
 from setuptools import setup
 
+version = '0.1.1'
+
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    os.system('python setup.py bdist_wheel upload')
+    print("You probably want to also tag the version now:")
+    print(" git tag -a %s -m 'version %s'" % (version, version))
+    print(" git push --tags")
+    sys.exit()
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name='sendgrid-newsletter',
-    version='0.1.1',
+    version=version,
     author='Buddy Lindsey, Jr.',
     author_email='blindsey@consumeraffairs.com',
     include_package_data=True,
